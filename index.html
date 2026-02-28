@@ -2,58 +2,35 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contrat Officiel</title>
     <style>
-        :root { --p: #000; --bg: #f4f4f7; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg); display: flex; justify-content: center; padding: 15px; margin: 0; }
-        .card { background: #fff; padding: 30px 20px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 450px; box-sizing: border-box; }
-        h1 { text-align: center; letter-spacing: 3px; font-size: 24px; margin-bottom: 5px; }
-        .sub { text-align: center; color: #888; margin-bottom: 30px; font-style: italic; }
-        input[type="text"] { width: 100%; padding: 16px; border: 2px solid #eee; border-radius: 12px; font-size: 18px; box-sizing: border-box; margin-bottom: 20px; }
-        .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
-        .opt { padding: 18px; border: 2px solid #eee; border-radius: 15px; cursor: pointer; display: flex; align-items: center; transition: 0.2s; }
-        .opt.selected { border-color: var(--p); background: #fafafa; }
-        .opt input { margin-right: 15px; width: 20px; height: 20px; accent-color: #000; }
-        button { width: 100%; padding: 20px; background: var(--p); color: #fff; border: none; border-radius: 15px; font-size: 18px; font-weight: bold; cursor: pointer; }
+        body { font-family: sans-serif; background: #f4f4f7; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; padding: 30px; border-radius: 20px; width: 100%; max-width: 400px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { text-align: center; margin-bottom: 20px; }
+        input[type="text"] { width: 100%; padding: 15px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; }
+        .opt { display: block; padding: 15px; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 10px; cursor: pointer; }
+        .opt:has(input:checked) { border-color: black; background: #f9f9f9; }
+        button { width: 100%; padding: 15px; background: black; color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-<div class="card" id="box">
+<div class="card">
     <h1>CONTRAT</h1>
-    <p class="sub">Mise au point sur notre relation</p>
-    
-    <form id="form" action="https://script.google.com/macros/s/AKfycbzxKL3944awFbEH05JsYPk9xhi_iEF7p0n6LV64YzyiIhGpXTyoA3uM33vxCIGbACxI3Q/exec" method="POST" target="vibe_check">
-        <input type="text" name="nom" placeholder="Ton prénom" required>
+    <form action="https://script.google.com/macros/s/AKfycbzxKL3944awFbEH05JsYPk9xhi_iEF7p0n6LV64YzyiIhGpXTyoA3uM33vxCIGbACxI3Q/exec" method="POST">
+        <label style="display:block; margin-bottom:5px; font-weight:bold;">TON PRÉNOM :</label>
+        <input type="text" name="nom" required>
         
-        <div class="options">
-            <label class="opt"><input type="radio" name="relation" value="Sérieuse" required><b>Sérieuse</b></label>
-            <label class="opt"><input type="radio" name="relation" value="Sans prise de tête"><b>Sans prise de tête</b></label>
-            <label class="opt"><input type="radio" name="relation" value="Ouverte"><b>Ouverte</b></label>
-            <label class="opt"><input type="radio" name="relation" value="Amical ++"><b>Amical ++</b></label>
-            <label class="opt"><input type="radio" name="relation" value="Amical"><b>Amical</b></label>
-        </div>
+        <label style="display:block; margin-bottom:5px; font-weight:bold;">TON CHOIX :</label>
+        <label class="opt"><input type="radio" name="relation" value="Sérieuse" required> Sérieuse</label>
+        <label class="opt"><input type="radio" name="relation" value="Sans prise de tête"> Sans prise de tête</label>
+        <label class="opt"><input type="radio" name="relation" value="Ouverte"> Ouverte</label>
+        <label class="opt"><input type="radio" name="relation" value="Amical"> Amical</label>
         
-        <button type="submit" onclick="submitted=true">SIGNER</button>
+        <button type="submit">SIGNER LE CONTRAT</button>
     </form>
 </div>
-
-<iframe name="vibe_check" id="vibe_check" style="display:none;" onload="if(typeof submitted!=='undefined') showSuccess()"></iframe>
-
-<script>
-    var submitted = false;
-    document.querySelectorAll('.opt').forEach(el => {
-        el.addEventListener('click', () => {
-            document.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
-            el.classList.add('selected');
-        });
-    });
-
-    function showSuccess() {
-        document.getElementById('box').innerHTML = "<div style='text-align:center;padding:50px;'><h1>✅</h1><h2>C'est signé !</h2><p>Le contrat est dans ma boîte mail.</p></div>";
-    }
-</script>
 
 </body>
 </html>
