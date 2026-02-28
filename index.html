@@ -1,36 +1,657 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contrat Officiel</title>
-    <style>
-        body { font-family: sans-serif; background: #f4f4f7; display: flex; justify-content: center; padding: 20px; }
-        .card { background: white; padding: 30px; border-radius: 20px; width: 100%; max-width: 400px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h1 { text-align: center; margin-bottom: 20px; }
-        input[type="text"] { width: 100%; padding: 15px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; }
-        .opt { display: block; padding: 15px; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 10px; cursor: pointer; }
-        .opt:has(input:checked) { border-color: black; background: #f9f9f9; }
-        button { width: 100%; padding: 15px; background: black; color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; margin-top: 10px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contrat — Mise au point sur notre relation</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #f5f0e8;
+    --ink: #1a1410;
+    --ink-light: #3d3028;
+    --gold: #b8972a;
+    --gold-light: #d4b44a;
+    --red: #8b1a1a;
+    --border: #c8b89a;
+    --shadow: rgba(26, 20, 16, 0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #2a1f14;
+    background-image: 
+      radial-gradient(ellipse at 20% 50%, #3d2d1a 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, #1a1410 0%, transparent 60%);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 20px;
+    font-family: 'EB Garamond', serif;
+  }
+
+  .document-wrapper {
+    position: relative;
+    max-width: 680px;
+    width: 100%;
+  }
+
+  /* Wax seal decoration */
+  .seal {
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 56px;
+    height: 56px;
+    background: radial-gradient(circle at 40% 35%, #c0392b, #7b1a1a);
+    border-radius: 50%;
+    box-shadow: 0 4px 20px rgba(139,26,26,0.5), inset 0 -2px 4px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    color: rgba(255,255,255,0.6);
+    font-size: 18px;
+    z-index: 10;
+    letter-spacing: -1px;
+  }
+  .seal::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .document {
+    background: var(--paper);
+    background-image: 
+      url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    border: 1px solid var(--border);
+    padding: 60px 70px 50px;
+    box-shadow: 
+      0 20px 60px rgba(0,0,0,0.4),
+      0 0 0 8px rgba(245,240,232,0.03),
+      inset 0 1px 0 rgba(255,255,255,0.5);
+    position: relative;
+    animation: fadeIn 0.8s ease both;
+  }
+
+  /* Corner ornaments */
+  .document::before, .document::after {
+    content: '✦';
+    position: absolute;
+    color: var(--gold);
+    font-size: 10px;
+    opacity: 0.5;
+  }
+  .document::before { top: 18px; left: 18px; }
+  .document::after { top: 18px; right: 18px; }
+
+  .corner-bl, .corner-br {
+    position: absolute;
+    bottom: 18px;
+    color: var(--gold);
+    font-size: 10px;
+    opacity: 0.5;
+  }
+  .corner-bl { left: 18px; }
+  .corner-br { right: 18px; }
+
+  /* Decorative border lines */
+  .border-top, .border-bottom {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--border), var(--gold), transparent);
+    margin: 0 -20px;
+    opacity: 0.6;
+  }
+  .border-top { margin-bottom: 28px; }
+  .border-bottom { margin-top: 28px; }
+
+  h1.title {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 8px;
+    text-align: center;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    text-align: center;
+    color: var(--ink-light);
+    letter-spacing: 1px;
+    margin-bottom: 0;
+  }
+
+  .section {
+    margin-bottom: 24px;
+    animation: slideUp 0.6s ease both;
+  }
+
+  .section:nth-child(1) { animation-delay: 0.1s; }
+  .section:nth-child(2) { animation-delay: 0.2s; }
+  .section:nth-child(3) { animation-delay: 0.3s; }
+
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  p.body-text {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--ink-light);
+    font-style: italic;
+  }
+
+  .name-line {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: 15px;
+    color: var(--ink-light);
+    line-height: 1.75;
+    font-style: italic;
+  }
+
+  .name-line input[type="text"] {
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid var(--gold);
+    padding: 2px 8px;
+    font-family: 'EB Garamond', serif;
+    font-size: 15px;
+    color: var(--ink);
+    outline: none;
+    min-width: 140px;
+    flex: 1;
+    max-width: 220px;
+    text-align: center;
+    transition: border-color 0.2s;
+  }
+  .name-line input[type="text"]:focus {
+    border-bottom-color: var(--red);
+  }
+  .name-line input[type="text"]::placeholder {
+    color: #c8b89a;
+    font-style: italic;
+  }
+
+  /* Checkbox options */
+  .options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 6px;
+  }
+
+  .option-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 12px 16px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+  }
+
+  .option-item:hover {
+    background: rgba(184,151,42,0.06);
+    border-color: var(--border);
+  }
+
+  .option-item.selected {
+    background: rgba(139,26,26,0.05);
+    border-color: var(--red);
+  }
+  .option-item.selected .option-box {
+    background: var(--red);
+    border-color: var(--red);
+  }
+  .option-item.selected .option-box::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .option-item input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .option-box {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--border);
+    flex-shrink: 0;
+    margin-top: 2px;
+    position: relative;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .option-box::after {
+    content: '✓';
+    color: white;
+    font-size: 11px;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.2s;
+  }
+
+  .option-label {
+    display: flex;
+    flex-direction: column;
+  }
+  .option-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .option-desc {
+    font-size: 13px;
+    color: #7a6a5a;
+    font-style: italic;
+    margin-top: 2px;
+  }
+
+  /* Special: Amical++ badge */
+  .option-item.special .option-name {
+    color: var(--red);
+  }
+  .badge-new {
+    display: inline-block;
+    background: var(--red);
+    color: white;
+    font-size: 9px;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 1px;
+    padding: 2px 5px;
+    margin-left: 8px;
+    vertical-align: middle;
+    opacity: 0.85;
+  }
+
+  /* Note / message field */
+  .note-field {
+    margin-top: 6px;
+  }
+  .note-field textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.4);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    font-family: 'EB Garamond', serif;
+    font-size: 14px;
+    color: var(--ink);
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+    transition: border-color 0.2s;
+    line-height: 1.6;
+  }
+  .note-field textarea:focus {
+    border-color: var(--gold);
+  }
+  .note-field textarea::placeholder {
+    color: #b8a898;
+    font-style: italic;
+  }
+
+  /* Legal fine print */
+  .legal {
+    font-size: 12px;
+    line-height: 1.7;
+    color: #8a7a6a;
+    font-style: italic;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+    margin-top: 8px;
+  }
+
+  /* Submit button */
+  .submit-btn {
+    display: block;
+    width: 100%;
+    margin-top: 28px;
+    padding: 14px 30px;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .submit-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(184,151,42,0.15), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s;
+  }
+  .submit-btn:hover::before {
+    transform: translateX(100%);
+  }
+  .submit-btn:hover {
+    background: var(--red);
+    letter-spacing: 6px;
+  }
+  .submit-btn:active {
+    transform: scale(0.99);
+  }
+
+  /* Success overlay */
+  .success-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26,20,16,0.92);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 40px;
+  }
+  .success-overlay.show { display: flex; animation: fadeIn 0.4s ease; }
+  .success-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+    animation: pulse 1s ease infinite alternate;
+  }
+  .success-title {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    letter-spacing: 4px;
+    color: var(--paper);
+    margin-bottom: 10px;
+  }
+  .success-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: #b8a898;
+    max-width: 360px;
+  }
+  .success-close {
+    margin-top: 30px;
+    padding: 10px 28px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--paper);
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .success-close:hover { background: var(--paper); color: var(--ink); }
+
+  /* Error message */
+  .error-msg {
+    display: none;
+    color: var(--red);
+    font-size: 13px;
+    font-style: italic;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(12px) } to { opacity: 1; transform: none } }
+  @keyframes pulse { from { transform: scale(1) } to { transform: scale(1.1) } }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .document { padding: 50px 28px 40px; }
+    h1.title { font-size: 20px; letter-spacing: 5px; }
+  }
+</style>
 </head>
 <body>
 
-<div class="card">
-    <h1>CONTRAT</h1>
-    <form action="https://script.google.com/macros/s/AKfycbzxKL3944awFbEH05JsYPk9xhi_iEF7p0n6LV64YzyiIhGpXTyoA3uM33vxCIGbACxI3Q/exec" method="POST">
-        <label style="display:block; margin-bottom:5px; font-weight:bold;">TON PRÉNOM :</label>
-        <input type="text" name="nom" required>
-        
-        <label style="display:block; margin-bottom:5px; font-weight:bold;">TON CHOIX :</label>
-        <label class="opt"><input type="radio" name="relation" value="Sérieuse" required> Sérieuse</label>
-        <label class="opt"><input type="radio" name="relation" value="Sans prise de tête"> Sans prise de tête</label>
-        <label class="opt"><input type="radio" name="relation" value="Ouverte"> Ouverte</label>
-        <label class="opt"><input type="radio" name="relation" value="Amical"> Amical</label>
-        
-        <button type="submit">SIGNER LE CONTRAT</button>
-    </form>
+<div class="document-wrapper">
+  <div class="seal">❧</div>
+  <div class="document">
+
+    <div class="corner-bl">✦</div>
+    <div class="corner-br">✦</div>
+
+    <hr class="border-top">
+
+    <h1 class="title">CONTRAT</h1>
+    <p class="subtitle">Mise au point sur notre relation</p>
+
+    <div style="height: 32px"></div>
+
+    <!-- Objectif -->
+    <div class="section">
+      <div class="section-label">Objectif</div>
+      <p class="body-text">
+        Je souhaite clarifier notre relation pour prévenir tout malentendu ou conflit potentiel.
+      </p>
+    </div>
+
+    <!-- Nom -->
+    <div class="section">
+      <div class="section-label">Identité</div>
+      <div class="name-line">
+        <span>Je soussigné(e)</span>
+        <input type="text" id="name" placeholder="Votre prénom" maxlength="60">
+        <span>, souhaite préciser que je suis en faveur d'une relation de type :</span>
+      </div>
+    </div>
+
+    <!-- Type de relation -->
+    <div class="section">
+      <div class="section-label">Nature de la relation</div>
+      <div class="options-grid">
+
+        <label class="option-item" id="opt-serieuse">
+          <input type="radio" name="type" value="Sérieuse">
+          <div class="option-box"></div>
+          <div class="option-label">
+            <span class="option-name">Sérieuse</span>
+            <span class="option-desc">Fidèle jusqu'à la mort même au-delà</span>
+          </div>
+        </label>
+
+        <label class="option-item" id="opt-sansprise">
+          <input type="radio" name="type" value="Sans prise de tête">
+          <div class="option-box"></div>
+          <div class="option-label">
+            <span class="option-name">Sans prise de tête</span>
+            <span class="option-desc">On verra ce que le destin nous réserve</span>
+          </div>
+        </label>
+
+        <label class="option-item" id="opt-ouverte">
+          <input type="radio" name="type" value="Ouverte">
+          <div class="option-box"></div>
+          <div class="option-label">
+            <span class="option-name">Ouverte</span>
+            <span class="option-desc">C'est que pour faire du cardio</span>
+          </div>
+        </label>
+
+        <label class="option-item" id="opt-amical">
+          <input type="radio" name="type" value="Amical">
+          <div class="option-box"></div>
+          <div class="option-label">
+            <span class="option-name">Amical</span>
+            <span class="option-desc">T'es le Sang</span>
+          </div>
+        </label>
+
+        <label class="option-item special" id="opt-amicalpp">
+          <input type="radio" name="type" value="Amical++">
+          <div class="option-box"></div>
+          <div class="option-label">
+            <span class="option-name">Amical++ <span class="badge-new">NOUVEAU</span></span>
+            <span class="option-desc">L'amitié... mais avec des avantages négociables</span>
+          </div>
+        </label>
+
+      </div>
+    </div>
+
+    <!-- Message / Note personnelle -->
+    <div class="section">
+      <div class="section-label">Note personnelle</div>
+      <div class="note-field">
+        <textarea id="message" placeholder="Un mot, une précision, une déclaration... (optionnel)"></textarea>
+      </div>
+    </div>
+
+    <!-- Clauses légales -->
+    <div class="section">
+      <p class="legal">
+        Les parties reconnaissent que, suite à la clarification de leurs attentes et à la sélection d'un type de relation, il est possible que l'interaction ou la communication entre elles évolue ou prenne fin. Cette décision devra être prise dans un esprit de respect mutuel, sans obligation dans le maintien d'une relation au-delà de ce qui est souhaité par l'une ou l'autre des parties.
+      </p>
+    </div>
+
+    <hr class="border-bottom">
+
+    <button class="submit-btn" onclick="submitContract()">
+      ✦ &nbsp; Signer &amp; Envoyer &nbsp; ✦
+    </button>
+
+    <p class="error-msg" id="error-msg">Veuillez remplir votre prénom et choisir un type de relation.</p>
+
+  </div><!-- .document -->
+</div><!-- .document-wrapper -->
+
+<!-- Success overlay -->
+<div class="success-overlay" id="success-overlay">
+  <div class="success-icon">💌</div>
+  <div class="success-title">Contrat Signé</div>
+  <p class="success-sub">Votre réponse a bien été transmise. Le destin en prend note.</p>
+  <button class="success-close" onclick="closeSuccess()">FERMER</button>
 </div>
 
+<script>
+  // ─── CONFIGURATION ──────────────────────────────────────────────────────
+  // Colle ici l'URL de ton Google Apps Script déployé (voir README.md)
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbxCVQhoouL1dFsCrA44CCxwu0Td-iiR2XhwlXVzV_TzPWttnTfBGZsQsu1DUDrQPTo/exec";
+  // ────────────────────────────────────────────────────────────────────────
+
+  // Radio visual update
+  document.querySelectorAll('input[type="radio"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+      document.querySelectorAll('.option-item').forEach(el => el.classList.remove('selected'));
+      if (this.checked) this.closest('.option-item').classList.add('selected');
+    });
+  });
+
+  function submitContract() {
+    const name   = document.getElementById('name').value.trim();
+    const typeEl = document.querySelector('input[name="type"]:checked');
+    const errorEl = document.getElementById('error-msg');
+
+    if (!name || !typeEl) {
+      errorEl.style.display = 'block';
+      errorEl.textContent = 'Veuillez remplir votre prénom et choisir un type de relation.';
+      return;
+    }
+    errorEl.style.display = 'none';
+
+    const type    = typeEl.value;
+    const message = document.getElementById('message').value.trim();
+    const dateStr = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
+
+    const btn = document.querySelector('.submit-btn');
+    btn.textContent = '✦  Envoi en cours...  ✦';
+    btn.disabled = true;
+
+    const payload = { name, type, message: message || '(aucune note)', date: dateStr };
+
+    // Google Apps Script ne supporte pas CORS avec lecture de réponse,
+    // on utilise no-cors : la requête part bien, on affiche le succès directement.
+    fetch(GAS_URL, {
+      method : 'POST',
+      mode   : 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body   : JSON.stringify(payload)
+    })
+    .then(() => showSuccess())
+    .catch(() => {
+      // Fallback mailto si fetch échoue (ex: GAS_URL pas encore configurée)
+      fallbackMailto(name, type, message, dateStr);
+    })
+    .finally(() => {
+      btn.disabled = false;
+      btn.textContent = '✦   Signer & Envoyer   ✦';
+    });
+  }
+
+  function fallbackMailto(name, type, message, dateStr) {
+    const body =
+`CONTRAT — Mise au point sur notre relation
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+Signataire  : ${name}
+Date        : ${dateStr}
+Type choisi : ${type}
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Note personnelle :
+${message || '(aucune)'}
+
+—
+Envoyé depuis le Contrat de Relation`;
+
+    const subject = `📜 Contrat signé par ${name} — ${type}`;
+    window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+    showSuccess();
+  }
+
+  function showSuccess() {
+    document.getElementById('success-overlay').classList.add('show');
+  }
+
+  function closeSuccess() {
+    document.getElementById('success-overlay').classList.remove('show');
+    document.getElementById('name').value = '';
+    document.getElementById('message').value = '';
+    document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+    document.querySelectorAll('.option-item').forEach(el => el.classList.remove('selected'));
+  }
+</script>
 </body>
 </html>
