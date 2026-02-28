@@ -144,7 +144,7 @@
 
   .section-label {
     font-family: 'Cinzel', serif;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 600;
     letter-spacing: 3px;
     color: var(--gold);
@@ -273,7 +273,7 @@
   }
   .option-name {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 600;
     color: var(--ink);
     line-height: 1.2;
@@ -315,7 +315,7 @@
 
   /* Legal fine print */
   .legal {
-    font-size: 13px;
+    font-size: 15px;
     line-height: 1.7;
     color: #8a7a6a;
     font-style: italic;
@@ -1085,15 +1085,15 @@
     var selectedDesc = descMap[type] || '';
 
     var labelStyle =
-      'font-family:Cinzel,serif;font-size:11px;font-weight:600;letter-spacing:3px;' +
+      'font-family:Cinzel,serif;font-size:13px;font-weight:600;letter-spacing:3px;' +
       'color:' + gold + ';text-transform:uppercase;margin-bottom:8px;padding-bottom:5px;' +
       'border-bottom:1px solid ' + border + ';display:block;';
 
     var sectionStyle = 'margin-bottom:26px;';
 
     var noteText = (message && message !== '(aucune note)')
-      ? '<span style="font-size:16px;color:' + inkL + ';line-height:1.8;font-style:italic;">' + message.replace(/\n/g,'<br>') + '</span>'
-      : '<span style="font-size:16px;color:#b8a898;font-style:italic;">Aucune note</span>';
+      ? '<span style="font-size:17px;color:' + inkL + ';line-height:1.8;font-style:italic;">' + message.replace(/\n/g,'<br>') + '</span>'
+      : '<span style="font-size:17px;color:#b8a898;font-style:italic;">Aucune note</span>';
 
     var hrGold =
       '<div style="height:2px;background:linear-gradient(90deg,transparent,' + gold + ',' + border + ',' + gold + ',transparent);' +
@@ -1123,19 +1123,19 @@
 
         '<h1 style="font-family:Cinzel,serif;font-size:26px;font-weight:600;letter-spacing:8px;' +
         'text-align:center;color:' + ink + ';margin:0 0 6px;">CONTRAT</h1>' +
-        '<p style="font-family:Cormorant Garamond,Georgia,serif;font-style:italic;font-size:15px;' +
+        '<p style="font-family:Cormorant Garamond,Georgia,serif;font-style:italic;font-size:17px;' +
         'text-align:center;color:' + inkL + ';letter-spacing:1px;margin:0 0 32px;">' +
         'Mise au point sur notre relation</p>' +
 
         '<div style="' + sectionStyle + '">' +
           '<span style="' + labelStyle + '">Objectif</span>' +
-          '<p style="font-size:16px;line-height:1.8;color:' + inkL + ';font-style:italic;margin:0;">' +
+          '<p style="font-size:17px;line-height:1.8;color:' + inkL + ';font-style:italic;margin:0;">' +
           'Je souhaite clarifier notre relation pour prévenir tout malentendu ou conflit potentiel.</p>' +
         '</div>' +
 
         '<div style="' + sectionStyle + '">' +
           '<span style="' + labelStyle + '">Identité</span>' +
-          '<p style="font-size:16px;line-height:1.8;color:' + inkL + ';font-style:italic;margin:0;">' +
+          '<p style="font-size:17px;line-height:1.8;color:' + inkL + ';font-style:italic;margin:0;">' +
             'Je soussigné(e) ' +
             '<span style="font-style:normal;color:' + ink + ';font-weight:600;">' + name + '</span>' +
             ', souhaite préciser que je suis en faveur d’une relation de type :' +
@@ -1147,7 +1147,7 @@
           '<div style="text-align:center;padding:8px 0 0;">' +
             '<div style="font-family:Cormorant Garamond,Georgia,serif;font-size:26px;font-weight:700;' +
             'color:' + red + ';letter-spacing:0.5px;line-height:1.2;margin-bottom:8px;">' + type + '</div>' +
-            '<div style="font-size:14px;color:#7a6a5a;font-style:italic;">' + selectedDesc + '</div>' +
+            '<div style="font-size:15px;color:#7a6a5a;font-style:italic;">' + selectedDesc + '</div>' +
           '</div>' +
         '</div>' +
 
@@ -1157,7 +1157,7 @@
         '</div>' +
 
         '<div style="border-top:1px solid ' + border + ';padding-top:14px;margin-bottom:26px;">' +
-          '<p style="font-size:12px;line-height:1.7;color:#8a7a6a;font-style:italic;margin:0;">' +
+          '<p style="font-size:15px;line-height:1.7;color:#8a7a6a;font-style:italic;margin:0;">' +
             'Les parties reconnaissent que, suite à la clarification de leurs attentes et à la sélection d’un ' +
             'type de relation, il est possible que l’interaction ou la communication entre elles évolue ou prenne fin. ' +
             'Cette décision devra être prise dans un esprit de respect mutuel, sans obligation dans le maintien ' +
@@ -1173,7 +1173,7 @@
               '<div style="font-family:Cinzel,serif;font-size:9px;letter-spacing:2px;' +
               'color:#7a6a5a;margin-bottom:6px;text-transform:uppercase;">Signature Électronique</div>' +
               '<div style="font-family:Cormorant Garamond,Georgia,serif;font-style:italic;' +
-              'font-size:16px;color:' + inkL + ';line-height:1.6;">' +
+              'font-size:17px;color:' + inkL + ';line-height:1.6;">' +
                 'Signé par <strong style="font-style:normal;color:' + ink + ';">' + name + '</strong><br>' +
                 '<span style="font-size:13px;color:#7a6a5a;">le ' + dateSig + '</span>' +
               '</div>' +
