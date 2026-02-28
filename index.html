@@ -442,6 +442,252 @@
     .document { padding: 50px 28px 40px; }
     h1.title { font-size: 20px; letter-spacing: 5px; }
   }
+
+  /* ══════════════════════════════════
+     PDF / PRINT VIEW
+  ══════════════════════════════════ */
+  #print-view { display: none; }
+
+  @media print {
+    @page { size: A4; margin: 0; }
+
+    *, *::before, *::after { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+    body {
+      background: #f5f0e8 !important;
+      display: block !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    /* Hide everything except print view */
+    .document-wrapper, .success-overlay { display: none !important; }
+
+    #print-view {
+      display: block !important;
+    }
+
+    .pv-page {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 28mm 24mm 24mm;
+      background: #f5f0e8 !important;
+      box-sizing: border-box;
+      position: relative;
+      font-family: 'EB Garamond', serif;
+    }
+
+    /* Corners */
+    .pv-corner { position: absolute; color: #b8972a; font-size: 9px; opacity: 0.55; }
+    .pv-corner.tl { top: 16mm; left: 16mm; }
+    .pv-corner.tr { top: 16mm; right: 16mm; }
+    .pv-corner.bl { bottom: 16mm; left: 16mm; }
+    .pv-corner.br { bottom: 16mm; right: 16mm; }
+
+    /* Decorative HR */
+    .pv-hr {
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #b8972a, #c8b89a, #b8972a, transparent) !important;
+      opacity: 0.65;
+      margin: 0 -10mm 8mm;
+    }
+    .pv-hr.bottom { margin: 8mm -10mm 0; }
+
+    /* Wax seal */
+    .pv-seal {
+      width: 14mm; height: 14mm;
+      background: radial-gradient(circle at 40% 35%, #c0392b, #7b1a1a) !important;
+      border-radius: 50%;
+      margin: 0 auto 6mm;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.6);
+      font-size: 16px;
+    }
+
+    .pv-title {
+      font-family: 'Cinzel', serif;
+      font-size: 22pt;
+      font-weight: 600;
+      letter-spacing: 7px;
+      text-align: center;
+      color: #1a1410 !important;
+      margin-bottom: 3mm;
+    }
+    .pv-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 11pt;
+      text-align: center;
+      color: #3d3028 !important;
+      letter-spacing: 1px;
+      margin-bottom: 0;
+    }
+
+    .pv-section { margin-bottom: 7mm; }
+
+    .pv-label {
+      font-family: 'Cinzel', serif;
+      font-size: 7.5pt;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      color: #b8972a !important;
+      text-transform: uppercase;
+      margin-bottom: 2.5mm;
+      display: flex;
+      align-items: center;
+      gap: 4mm;
+    }
+    .pv-label::after {
+      content: '';
+      flex: 1;
+      height: 0.4mm;
+      background: linear-gradient(90deg, #c8b89a, transparent) !important;
+    }
+
+    .pv-text {
+      font-size: 10.5pt;
+      line-height: 1.75;
+      color: #3d3028 !important;
+      font-style: italic;
+    }
+
+    /* Signed name line */
+    .pv-name-line {
+      font-size: 10.5pt;
+      color: #3d3028 !important;
+      font-style: italic;
+      line-height: 1.75;
+    }
+    .pv-name-value {
+      font-style: normal;
+      color: #1a1410 !important;
+      font-weight: 500;
+      border-bottom: 0.4mm solid #b8972a;
+      padding: 0 3mm;
+      display: inline-block;
+      min-width: 30mm;
+      text-align: center;
+    }
+
+    /* Options list */
+    .pv-options { margin-top: 2mm; }
+    .pv-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 4mm;
+      padding: 2.5mm 3mm;
+      margin-bottom: 1.5mm;
+      border: 0.3mm solid transparent;
+      border-radius: 1mm;
+    }
+    .pv-option.chosen {
+      background: rgba(139,26,26,0.04) !important;
+      border-color: #8b1a1a !important;
+    }
+    .pv-checkbox {
+      width: 4mm; height: 4mm;
+      border: 0.4mm solid #c8b89a;
+      flex-shrink: 0;
+      margin-top: 0.8mm;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 7pt;
+      color: white;
+      background: transparent;
+    }
+    .pv-option.chosen .pv-checkbox {
+      background: #8b1a1a !important;
+      border-color: #8b1a1a !important;
+    }
+    .pv-opt-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 12pt;
+      font-weight: 600;
+      color: #1a1410 !important;
+      line-height: 1.2;
+    }
+    .pv-option.chosen .pv-opt-name { color: #8b1a1a !important; }
+    .pv-opt-desc {
+      font-size: 8.5pt;
+      color: #7a6a5a !important;
+      font-style: italic;
+      margin-top: 0.5mm;
+    }
+    .pv-badge {
+      display: inline-block;
+      background: #8b1a1a !important;
+      color: white !important;
+      font-size: 5.5pt;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.5px;
+      padding: 0.5mm 1.5mm;
+      margin-left: 2mm;
+      vertical-align: middle;
+    }
+
+    /* Note */
+    .pv-note-box {
+      border: 0.3mm solid #c8b89a;
+      padding: 3mm 4mm;
+      min-height: 16mm;
+      background: rgba(255,255,255,0.4) !important;
+    }
+    .pv-note-text {
+      font-size: 10pt;
+      color: #1a1410 !important;
+      line-height: 1.6;
+    }
+    .pv-note-text.empty { color: #b8a898 !important; font-style: italic; }
+
+    /* Legal */
+    .pv-legal {
+      font-size: 7.5pt;
+      line-height: 1.7;
+      color: #8a7a6a !important;
+      font-style: italic;
+      border-top: 0.3mm solid #c8b89a;
+      padding-top: 4mm;
+    }
+
+    /* Signature block */
+    .pv-sig-block {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 6mm;
+    }
+    .pv-sig-area {
+      text-align: center;
+      min-width: 50mm;
+    }
+    .pv-sig-line {
+      border-bottom: 0.4mm solid #1a1410;
+      width: 50mm;
+      margin-bottom: 2mm;
+    }
+    .pv-sig-label {
+      font-family: 'Cinzel', serif;
+      font-size: 6.5pt;
+      letter-spacing: 2px;
+      color: #7a6a5a !important;
+    }
+
+    /* Date footer */
+    .pv-date {
+      position: absolute;
+      bottom: 14mm;
+      left: 24mm;
+      right: 24mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .pv-date-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 8pt;
+      font-style: italic;
+      color: #8a7a6a !important;
+    }
+  }
 </style>
 </head>
 <body>
@@ -562,14 +808,109 @@
   <div class="success-icon">💌</div>
   <div class="success-title">Contrat Signé</div>
   <p class="success-sub">Votre réponse a bien été transmise. Le destin en prend note.</p>
-  <button class="success-close" onclick="closeSuccess()">FERMER</button>
+  <div style="display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-top:30px;">
+    <button class="success-close" style="margin-top:0; background:rgba(184,151,42,0.15); border-color:#b8972a; color:#f5f0e8;" onclick="downloadPDF()">
+      ✦ &nbsp;TÉLÉCHARGER LE PDF&nbsp; ✦
+    </button>
+    <button class="success-close" style="margin-top:0;" onclick="closeSuccess()">FERMER</button>
+  </div>
+</div>
+
+<!-- ═══ PRINT VIEW (hidden — visible only on print/PDF) ═══ -->
+<div id="print-view">
+  <div class="pv-page">
+    <span class="pv-corner tl">✦</span>
+    <span class="pv-corner tr">✦</span>
+    <span class="pv-corner bl">✦</span>
+    <span class="pv-corner br">✦</span>
+
+    <div class="pv-seal">❧</div>
+
+    <hr class="pv-hr">
+    <div class="pv-title">CONTRAT</div>
+    <div class="pv-subtitle">Mise au point sur notre relation</div>
+    <div style="height:7mm"></div>
+
+    <!-- Objectif -->
+    <div class="pv-section">
+      <div class="pv-label">Objectif</div>
+      <p class="pv-text">Je souhaite clarifier notre relation pour prévenir tout malentendu ou conflit potentiel.</p>
+    </div>
+
+    <!-- Identité -->
+    <div class="pv-section">
+      <div class="pv-label">Identité</div>
+      <p class="pv-text">
+        Je soussigné(e) <span class="pv-name-value" id="pv-name-display">&nbsp;</span>,
+        souhaite préciser que je suis en faveur d'une relation de type :
+      </p>
+    </div>
+
+    <!-- Nature -->
+    <div class="pv-section">
+      <div class="pv-label">Nature de la relation</div>
+      <div class="pv-options">
+        <div class="pv-option" id="pv-opt-serieuse">
+          <div class="pv-checkbox" id="pv-check-serieuse"></div>
+          <div><div class="pv-opt-name">Sérieuse</div><div class="pv-opt-desc">Fidèle jusqu'à la mort même au-delà</div></div>
+        </div>
+        <div class="pv-option" id="pv-opt-sansprise">
+          <div class="pv-checkbox" id="pv-check-sansprise"></div>
+          <div><div class="pv-opt-name">Sans prise de tête</div><div class="pv-opt-desc">On verra ce que le destin nous réserve</div></div>
+        </div>
+        <div class="pv-option" id="pv-opt-ouverte">
+          <div class="pv-checkbox" id="pv-check-ouverte"></div>
+          <div><div class="pv-opt-name">Ouverte</div><div class="pv-opt-desc">C'est que pour faire du cardio</div></div>
+        </div>
+        <div class="pv-option" id="pv-opt-amical">
+          <div class="pv-checkbox" id="pv-check-amical"></div>
+          <div><div class="pv-opt-name">Amical</div><div class="pv-opt-desc">T'es le Sang</div></div>
+        </div>
+        <div class="pv-option" id="pv-opt-amicalpp">
+          <div class="pv-checkbox" id="pv-check-amicalpp"></div>
+          <div><div class="pv-opt-name">Amical++ <span class="pv-badge">NOUVEAU</span></div><div class="pv-opt-desc">L'amitié... mais avec des avantages négociables</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Note -->
+    <div class="pv-section">
+      <div class="pv-label">Note personnelle</div>
+      <div class="pv-note-box">
+        <div class="pv-note-text" id="pv-message-display"></div>
+      </div>
+    </div>
+
+    <!-- Legal -->
+    <div class="pv-section">
+      <p class="pv-legal">Les parties reconnaissent que, suite à la clarification de leurs attentes et à la sélection d'un type de relation, il est possible que l'interaction ou la communication entre elles évolue ou prenne fin. Cette décision devra être prise dans un esprit de respect mutuel, sans obligation dans le maintien d'une relation au-delà de ce qui est souhaité par l'une ou l'autre des parties.</p>
+    </div>
+
+    <hr class="pv-hr bottom">
+
+    <!-- Signature -->
+    <div class="pv-sig-block">
+      <div class="pv-sig-area">
+        <div class="pv-sig-line"></div>
+        <div class="pv-sig-label">SIGNATURE</div>
+      </div>
+    </div>
+
+    <!-- Date footer -->
+    <div class="pv-date">
+      <span class="pv-date-text" id="pv-date-display"></span>
+      <span class="pv-date-text" style="letter-spacing:1px; font-style:normal;">✦</span>
+    </div>
+  </div>
 </div>
 
 <script>
   // ─── CONFIGURATION ──────────────────────────────────────────────────────
-  // Colle ici l'URL de ton Google Apps Script déployé (voir README.md)
   const GAS_URL = "https://script.google.com/macros/s/AKfycbxCVQhoouL1dFsCrA44CCxwu0Td-iiR2XhwlXVzV_TzPWttnTfBGZsQsu1DUDrQPTo/exec";
   // ────────────────────────────────────────────────────────────────────────
+
+  // Keep track of last submitted data for PDF generation
+  let lastSubmission = {};
 
   // Radio visual update
   document.querySelectorAll('input[type="radio"]').forEach(radio => {
@@ -595,14 +936,15 @@
     const message = document.getElementById('message').value.trim();
     const dateStr = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
 
+    // Store for PDF
+    lastSubmission = { name, type, message, date: dateStr };
+
     const btn = document.querySelector('.submit-btn');
     btn.textContent = '✦  Envoi en cours...  ✦';
     btn.disabled = true;
 
     const payload = { name, type, message: message || '(aucune note)', date: dateStr };
 
-    // Google Apps Script ne supporte pas CORS avec lecture de réponse,
-    // on utilise no-cors : la requête part bien, on affiche le succès directement.
     fetch(GAS_URL, {
       method : 'POST',
       mode   : 'no-cors',
@@ -610,10 +952,7 @@
       body   : JSON.stringify(payload)
     })
     .then(() => showSuccess())
-    .catch(() => {
-      // Fallback mailto si fetch échoue (ex: GAS_URL pas encore configurée)
-      fallbackMailto(name, type, message, dateStr);
-    })
+    .catch(() => fallbackMailto(name, type, message, dateStr))
     .finally(() => {
       btn.disabled = false;
       btn.textContent = '✦   Signer & Envoyer   ✦';
@@ -635,7 +974,6 @@ ${message || '(aucune)'}
 
 —
 Envoyé depuis le Contrat de Relation`;
-
     const subject = `📜 Contrat signé par ${name} — ${type}`;
     window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
     showSuccess();
@@ -643,6 +981,59 @@ Envoyé depuis le Contrat de Relation`;
 
   function showSuccess() {
     document.getElementById('success-overlay').classList.add('show');
+    populatePrintView();
+  }
+
+  // ─── Populate the hidden print view with submitted data ─────────────────
+  function populatePrintView() {
+    const { name, type, message, date } = lastSubmission;
+
+    // Name
+    document.getElementById('pv-name-display').textContent = name || '';
+
+    // Date
+    document.getElementById('pv-date-display').textContent = 'Fait le ' + (date || '');
+
+    // Message
+    const msgEl = document.getElementById('pv-message-display');
+    if (message) {
+      msgEl.textContent = message;
+      msgEl.classList.remove('empty');
+    } else {
+      msgEl.textContent = '(aucune note)';
+      msgEl.classList.add('empty');
+    }
+
+    // Options — map type value to option element IDs
+    const optMap = {
+      'Sérieuse'         : 'serieuse',
+      'Sans prise de tête': 'sansprise',
+      'Ouverte'          : 'ouverte',
+      'Amical'           : 'amical',
+      'Amical++'         : 'amicalpp'
+    };
+    // Reset all
+    Object.values(optMap).forEach(id => {
+      const el = document.getElementById('pv-opt-' + id);
+      const cb = document.getElementById('pv-check-' + id);
+      if (el) el.classList.remove('chosen');
+      if (cb) cb.textContent = '';
+    });
+    // Mark chosen
+    const chosenId = optMap[type];
+    if (chosenId) {
+      const el = document.getElementById('pv-opt-' + chosenId);
+      const cb = document.getElementById('pv-check-' + chosenId);
+      if (el) el.classList.add('chosen');
+      if (cb) cb.textContent = '✓';
+    }
+  }
+
+  // ─── Trigger browser print (→ Save as PDF) ──────────────────────────────
+  function downloadPDF() {
+    // Small delay to let overlay close feel smooth
+    document.getElementById('success-overlay').classList.remove('show');
+    setTimeout(() => window.print(), 300);
   }
 
   function closeSuccess() {
@@ -651,6 +1042,7 @@ Envoyé depuis le Contrat de Relation`;
     document.getElementById('message').value = '';
     document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
     document.querySelectorAll('.option-item').forEach(el => el.classList.remove('selected'));
+    lastSubmission = {};
   }
 </script>
 </body>
