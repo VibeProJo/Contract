@@ -285,6 +285,8 @@
     margin-top: 2px;
   }
 
+
+
   /* Note / message field */
   .note-field {
     margin-top: 6px;
@@ -418,6 +420,8 @@
 
   @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
   @keyframes slideUp { from { opacity: 0; transform: translateY(12px) } to { opacity: 1; transform: none } }
+  
+  @keyframes spin { to { transform: rotate(360deg) } }
   @keyframes pulse { from { transform: scale(1) } to { transform: scale(1.1) } }
 
   /* Mobile */
@@ -851,7 +855,7 @@
         </div>
         <div class="pv-option" id="pv-opt-amicalpp">
           <div class="pv-checkbox" id="pv-check-amicalpp"></div>
-          <div><div class="pv-opt-name">Amical++ <span class="pv-badge">NOUVEAU</span></div><div class="pv-opt-desc">L'amitié... mais avec des avantages négociables</div></div>
+          <div><div class="pv-opt-name">Amical++</div><div class="pv-opt-desc">L'amitié... mais avec des avantages négociables</div></div>
         </div>
       </div>
     </div>
@@ -887,15 +891,16 @@
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
   // ─── CONFIGURATION ──────────────────────────────────────────────────────
   const GAS_URL = "https://script.google.com/macros/s/AKfycbxCVQhoouL1dFsCrA44CCxwu0Td-iiR2XhwlXVzV_TzPWttnTfBGZsQsu1DUDrQPTo/exec";
   // ────────────────────────────────────────────────────────────────────────
 
-  // Keep track of last submitted data for PDF generation
   let lastSubmission = {};
 
-  // Radio visual update
+  // ── Radio visual update ─────────────────────────────────────────────────
   document.querySelectorAll('input[type="radio"]').forEach(radio => {
     radio.addEventListener('change', function() {
       document.querySelectorAll('.option-item').forEach(el => el.classList.remove('selected'));
@@ -903,6 +908,7 @@
     });
   });
 
+  // ── Submit ──────────────────────────────────────────────────────────────
   function submitContract() {
     const name   = document.getElementById('name').value.trim();
     const typeEl = document.querySelector('input[name="type"]:checked');
@@ -917,19 +923,20 @@
 
     const type    = typeEl.value;
     const message = document.getElementById('message').value.trim();
-    const dateStr = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
+    const now     = new Date();
+    const dateStr = now.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
+    // DD-MM-YYYY for signature
+    const pad = n => String(n).padStart(2,'0');
+    const dateSig = pad(now.getDate()) + '-' + pad(now.getMonth()+1) + '-' + now.getFullYear();
 
-    // Store for PDF
-    lastSubmission = { name, type, message, date: dateStr };
+    lastSubmission = { name, type, message, date: dateStr, dateSig };
 
     const btn = document.querySelector('.submit-btn');
-    btn.textContent = '✦  Envoi en cours...  ✦';
+    btn.textContent = '\u2726  Envoi en cours...  \u2726';
     btn.disabled = true;
 
     const payload = { name, type, message: message || '(aucune note)', date: dateStr };
 
-    // Fix CORB: GAS requiert Content-Type text/plain pour les headers CORS corrects.
-    // no-cors + application/json = reponse bloquee par Chrome CORB.
     fetch(GAS_URL, {
       method : 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -943,85 +950,224 @@
     })
     .finally(() => {
       btn.disabled = false;
-      btn.textContent = '✦   Signer & Envoyer   ✦';
+      btn.textContent = '\u2726   Signer & Envoyer   \u2726';
     });
   }
 
   function fallbackMailto(name, type, message, dateStr) {
-    const body =
-`CONTRAT — Mise au point sur notre relation
-
-━━━━━━━━━━━━━━━━━━━━━━━━
-Signataire  : ${name}
-Date        : ${dateStr}
-Type choisi : ${type}
-━━━━━━━━━━━━━━━━━━━━━━━━
-
-Note personnelle :
-${message || '(aucune)'}
-
-—
-Envoyé depuis le Contrat de Relation`;
-    const subject = `📜 Contrat signé par ${name} — ${type}`;
+    const subject = `\u{1F4DC} Contrat sign\u00e9 par ${name} \u2014 ${type}`;
+    const body = `CONTRAT \u2014 Mise au point sur notre relation\n\nSignataire  : ${name}\nDate        : ${dateStr}\nType choisi : ${type}\n\nNote personnelle :\n${message || '(aucune)'}\n\n\u2014 Envoy\u00e9 depuis le Contrat de Relation`;
     window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
     showSuccess();
   }
 
   function showSuccess() {
     document.getElementById('success-overlay').classList.add('show');
-    populatePrintView();
   }
 
-  // ─── Populate the hidden print view with submitted data ─────────────────
-  function populatePrintView() {
-    const { name, type, message, date } = lastSubmission;
+  // ── Download PDF via html2canvas + jsPDF ────────────────────────────────
+  async function downloadPDF() {
+    const { name, type, message, dateSig } = lastSubmission;
 
-    // Name
-    document.getElementById('pv-name-display').textContent = name || '';
-
-    // Date
-    document.getElementById('pv-date-display').textContent = 'Fait le ' + (date || '');
-
-    // Message
-    const msgEl = document.getElementById('pv-message-display');
-    if (message) {
-      msgEl.textContent = message;
-      msgEl.classList.remove('empty');
-    } else {
-      msgEl.textContent = '(aucune note)';
-      msgEl.classList.add('empty');
-    }
-
-    // Options — map type value to option element IDs
-    const optMap = {
-      'Sérieuse'         : 'serieuse',
-      'Sans prise de tête': 'sansprise',
-      'Ouverte'          : 'ouverte',
-      'Amical'           : 'amical',
-      'Amical++'         : 'amicalpp'
-    };
-    // Reset all
-    Object.values(optMap).forEach(id => {
-      const el = document.getElementById('pv-opt-' + id);
-      const cb = document.getElementById('pv-check-' + id);
-      if (el) el.classList.remove('chosen');
-      if (cb) cb.textContent = '';
-    });
-    // Mark chosen
-    const chosenId = optMap[type];
-    if (chosenId) {
-      const el = document.getElementById('pv-opt-' + chosenId);
-      const cb = document.getElementById('pv-check-' + chosenId);
-      if (el) el.classList.add('chosen');
-      if (cb) cb.textContent = '✓';
-    }
-  }
-
-  // ─── Trigger browser print (→ Save as PDF) ──────────────────────────────
-  function downloadPDF() {
-    // Small delay to let overlay close feel smooth
     document.getElementById('success-overlay').classList.remove('show');
-    setTimeout(() => window.print(), 300);
+
+    // Show loading indicator
+    const loadingEl = document.createElement('div');
+    loadingEl.id = 'pdf-loading';
+    loadingEl.style.cssText = 'position:fixed;inset:0;background:rgba(26,20,16,0.85);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;';
+    loadingEl.innerHTML = '<div style="font-family:Cinzel,serif;color:#f5f0e8;font-size:13px;letter-spacing:4px;margin-bottom:14px;">G\u00c9N\u00c9RATION DU PDF...</div><div id="pdf-spinner" style="width:36px;height:36px;border:2px solid rgba(184,151,42,0.3);border-top-color:#b8972a;border-radius:50%;animation:spin 0.8s linear infinite;"></div>';
+    document.body.appendChild(loadingEl);
+
+    // Build A4 container off-screen
+    const container = document.createElement('div');
+    container.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;min-height:1123px;background:#f5f0e8;box-sizing:border-box;font-family:EB Garamond,Georgia,serif;';
+    container.innerHTML = buildPDFContainerHTML(name, type, message, dateSig);
+    document.body.appendChild(container);
+
+    // Wait for fonts to be ready
+    await document.fonts.ready;
+    // Extra tick for layout
+    await new Promise(r => setTimeout(r, 200));
+
+    try {
+      const canvas = await html2canvas(container, {
+        scale: 2.5,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#f5f0e8',
+        width: 794,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: 794
+      });
+
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+      const pageW = 210;
+      const pageH = 297;
+      const imgW  = canvas.width;
+      const imgH  = canvas.height;
+      const ratio = pageW / (imgW / 2.5); // account for scale factor
+      const renderedH = (imgH / 2.5) * ratio;
+
+      const imgData = canvas.toDataURL('image/jpeg', 0.97);
+
+      if (renderedH <= pageH) {
+        pdf.addImage(imgData, 'JPEG', 0, 0, pageW, renderedH);
+      } else {
+        // Multi-page: slice image
+        const sliceH_px  = Math.floor((pageH / renderedH) * imgH);
+        let   offsetY_px = 0;
+        let   page       = 0;
+        while (offsetY_px < imgH) {
+          if (page > 0) pdf.addPage();
+          const sliceCanvas = document.createElement('canvas');
+          sliceCanvas.width  = imgW;
+          sliceCanvas.height = Math.min(sliceH_px, imgH - offsetY_px);
+          const ctx = sliceCanvas.getContext('2d');
+          ctx.drawImage(canvas, 0, offsetY_px, imgW, sliceCanvas.height, 0, 0, imgW, sliceCanvas.height);
+          const sliceData = sliceCanvas.toDataURL('image/jpeg', 0.97);
+          const sliceRenderedH = (sliceCanvas.height / imgH) * renderedH;
+          pdf.addImage(sliceData, 'JPEG', 0, 0, pageW, sliceRenderedH);
+          offsetY_px += sliceH_px;
+          page++;
+        }
+      }
+
+      const fname = 'Contrat_' + (name || 'relation').replace(/\s+/g, '_') + '.pdf';
+      pdf.save(fname);
+
+    } catch(err) {
+      console.error('PDF generation error:', err);
+      alert('Erreur lors de la g\u00e9n\u00e9ration du PDF. Essayez de r\u00e9-ouvrir la page et de resoumettre.');
+    } finally {
+      document.body.removeChild(container);
+      document.body.removeChild(loadingEl);
+    }
+  }
+
+  // ── Build the HTML content captured by html2canvas ───────────────────────
+  // Mirrors the .document div design using inline styles only
+  function buildPDFContainerHTML(name, type, message, dateSig) {
+    const gold    = '#b8972a';
+    const red     = '#8b1a1a';
+    const ink     = '#1a1410';
+    const inkL    = '#3d3028';
+    const border  = '#c8b89a';
+    const paper   = '#f5f0e8';
+
+    const labelStyle =
+      'font-family:Cinzel,serif;font-size:11px;font-weight:600;letter-spacing:3px;' +
+      'color:' + gold + ';text-transform:uppercase;margin-bottom:8px;padding-bottom:5px;' +
+      'border-bottom:1px solid ' + border + ';display:block;';
+
+    const sectionStyle = 'margin-bottom:22px;';
+
+    const options = [
+      { val:'S\u00e9rieuse',            desc:"Fid\u00e8le jusqu'\u00e0 la mort m\u00eame au-del\u00e0" },
+      { val:'Sans prise de t\u00eate',  desc:"On verra ce que le destin nous r\u00e9serve" },
+      { val:'Ouverte',                  desc:"C'est que pour faire du cardio" },
+      { val:'Amical',                   desc:"T'es le Sang" },
+      { val:'Amical++',                 desc:"L'amiti\u00e9... mais avec des avantages n\u00e9gociables" }
+    ];
+
+    const optionsHTML = options.map(opt => {
+      const chosen   = (opt.val === type);
+      const rowBg    = chosen ? 'background:rgba(139,26,26,0.06);border:1px solid ' + red + ';' : 'border:1px solid transparent;';
+      const boxBg    = chosen ? 'background:' + red + ';border:1.5px solid ' + red + ';' : 'background:transparent;border:1.5px solid ' + border + ';';
+      const nameColor= chosen ? red : ink;
+      return (
+        '<div style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;margin-bottom:6px;border-radius:2px;' + rowBg + '">' +
+          '<div style="width:16px;height:16px;flex-shrink:0;margin-top:3px;display:flex;align-items:center;justify-content:center;font-size:10px;color:white;' + boxBg + '">' +
+            (chosen ? '\u2713' : '') +
+          '</div>' +
+          '<div>' +
+            '<div style="font-family:Cormorant Garamond,Georgia,serif;font-size:16px;font-weight:600;color:' + nameColor + ';line-height:1.2;">' + opt.val + '</div>' +
+            '<div style="font-size:12px;color:#7a6a5a;font-style:italic;margin-top:2px;">' + opt.desc + '</div>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+
+    const noteHTML = message && message !== '(aucune note)'
+      ? '<span style="font-size:14px;color:' + ink + ';line-height:1.6;">' + message.replace(/\n/g,'<br>') + '</span>'
+      : '<span style="font-size:14px;color:#b8a898;font-style:italic;">aucune note</span>';
+
+    // Decorative HR gradient — use a table trick for compatibility with html2canvas
+    const hrGold = '<div style="height:2px;background:linear-gradient(90deg,transparent,' + gold + ',' + border + ',' + gold + ',transparent);opacity:0.65;margin:4px -20px 24px;"></div>';
+
+    // Corner ornaments
+    const corners =
+      '<div style="position:absolute;top:16px;left:16px;color:' + gold + ';font-size:10px;opacity:0.5;">\u2726</div>' +
+      '<div style="position:absolute;top:16px;right:16px;color:' + gold + ';font-size:10px;opacity:0.5;">\u2726</div>' +
+      '<div style="position:absolute;bottom:16px;left:16px;color:' + gold + ';font-size:10px;opacity:0.5;">\u2726</div>' +
+      '<div style="position:absolute;bottom:16px;right:16px;color:' + gold + ';font-size:10px;opacity:0.5;">\u2726</div>';
+
+    // Wax seal
+    const seal =
+      '<div style="width:52px;height:52px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#c0392b,#7b1a1a);' +
+      'margin:0 auto 0;display:flex;align-items:center;justify-content:center;' +
+      'font-size:18px;color:rgba(255,255,255,0.65);box-shadow:0 4px 16px rgba(139,26,26,0.4);">\u2767</div>';
+
+    return (
+      '<div style="position:relative;background:' + paper + ';padding:56px 64px 48px;min-height:1100px;box-sizing:border-box;border:1px solid ' + border + ';">' +
+        corners +
+        seal +
+        '<div style="height:24px;"></div>' +
+        hrGold +
+        '<h1 style="font-family:Cinzel,serif;font-size:26px;font-weight:600;letter-spacing:8px;text-align:center;color:' + ink + ';margin:0 0 6px;">CONTRAT</h1>' +
+        '<p style="font-family:Cormorant Garamond,Georgia,serif;font-style:italic;font-size:15px;text-align:center;color:' + inkL + ';letter-spacing:1px;margin:0 0 28px;">Mise au point sur notre relation</p>' +
+
+        // Objectif
+        '<div style="' + sectionStyle + '">' +
+          '<span style="' + labelStyle + '">Objectif</span>' +
+          '<p style="font-size:14px;line-height:1.75;color:' + inkL + ';font-style:italic;margin:0;">Je souhaite clarifier notre relation pour pr\u00e9venir tout malentendu ou conflit potentiel.</p>' +
+        '</div>' +
+
+        // Identit\u00e9
+        '<div style="' + sectionStyle + '">' +
+          '<span style="' + labelStyle + '">Identit\u00e9</span>' +
+          '<p style="font-size:14px;line-height:1.75;color:' + inkL + ';font-style:italic;margin:0;">' +
+            'Je soussign\u00e9(e)\u00a0' +
+            '<span style="font-style:normal;color:' + ink + ';font-weight:600;border-bottom:1.5px solid ' + gold + ';padding:0 8px;display:inline-block;text-align:center;min-width:100px;">' + name + '</span>' +
+            ',\u00a0souhaite pr\u00e9ciser que je suis en faveur d\u2019une relation de type\u00a0:' +
+          '</p>' +
+        '</div>' +
+
+        // Nature
+        '<div style="' + sectionStyle + '">' +
+          '<span style="' + labelStyle + '">Nature de la relation</span>' +
+          optionsHTML +
+        '</div>' +
+
+        // Note
+        '<div style="' + sectionStyle + '">' +
+          '<span style="' + labelStyle + '">Note personnelle</span>' +
+          '<div style="border:1px solid ' + border + ';padding:10px 14px;min-height:60px;background:rgba(255,255,255,0.45);">' + noteHTML + '</div>' +
+        '</div>' +
+
+        // Legal
+        '<div style="border-top:1px solid ' + border + ';padding-top:14px;margin-bottom:24px;">' +
+          '<p style="font-size:11px;line-height:1.7;color:#8a7a6a;font-style:italic;margin:0;">' +
+            'Les parties reconnaissent que, suite \u00e0 la clarification de leurs attentes et \u00e0 la s\u00e9lection d\u2019un type de relation, il est possible que l\u2019interaction ou la communication entre elles \u00e9volue ou prenne fin. Cette d\u00e9cision devra \u00eatre prise dans un esprit de respect mutuel, sans obligation dans le maintien d\u2019une relation au-del\u00e0 de ce qui est souhait\u00e9 par l\u2019une ou l\u2019autre des parties.' +
+          '</p>' +
+        '</div>' +
+
+        '<div style="height:2px;background:linear-gradient(90deg,transparent,' + gold + ',' + border + ',' + gold + ',transparent);opacity:0.65;margin:0 -20px 24px;"></div>' +
+
+        // Signature block
+        '<div style="text-align:right;margin-top:8px;">' +
+          '<div style="display:inline-block;text-align:center;min-width:180px;">' +
+            '<div style="border-top:1.5px solid ' + ink + ';padding-top:6px;">' +
+              '<div style="font-family:Cinzel,serif;font-size:10px;letter-spacing:2px;color:#7a6a5a;margin-bottom:4px;">SIGNATURE ÉLECTRONIQUE</div>' +
+              '<div style="font-family:Cormorant Garamond,Georgia,serif;font-style:italic;font-size:13px;color:' + inkL + ';">Sign\u00e9 par <strong style="color:' + ink + ';">' + name + '</strong><br>le ' + dateSig + '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
+      '</div>'
+    );
   }
 
   function closeSuccess() {
@@ -1034,4 +1180,3 @@ Envoyé depuis le Contrat de Relation`;
   }
 </script>
 </body>
-</html>
