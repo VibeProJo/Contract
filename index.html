@@ -964,6 +964,17 @@
     });
   }
 
+  function showSuccess() {
+    document.getElementById('success-overlay').classList.add('show');
+  }
+
+  function fallbackMailto(name, type, message, dateStr) {
+    var subject = encodeURIComponent('Contrat signe par ' + name + ' - ' + type);
+    var body = encodeURIComponent('CONTRAT - Mise au point sur notre relation\n\nSignataire : ' + name + '\nDate : ' + dateStr + '\nType choisi : ' + type + '\n\nNote personnelle :\n' + (message || '(aucune)'));
+    window.open('mailto:?subject=' + subject + '&body=' + body);
+    showSuccess();
+  }
+
   async function downloadPDF() {
     var { name, type, message, dateSig } = lastSubmission;
 
