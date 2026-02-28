@@ -285,23 +285,6 @@
     margin-top: 2px;
   }
 
-  /* Special: Amical++ badge */
-  .option-item.special .option-name {
-    color: var(--red);
-  }
-  .badge-new {
-    display: inline-block;
-    background: var(--red);
-    color: white;
-    font-size: 9px;
-    font-family: 'Cinzel', serif;
-    letter-spacing: 1px;
-    padding: 2px 5px;
-    margin-left: 8px;
-    vertical-align: middle;
-    opacity: 0.85;
-  }
-
   /* Note / message field */
   .note-field {
     margin-top: 6px;
@@ -769,7 +752,7 @@
           <input type="radio" name="type" value="Amical++">
           <div class="option-box"></div>
           <div class="option-label">
-            <span class="option-name">Amical++ <span class="badge-new">NOUVEAU</span></span>
+            <span class="option-name">Amical++</span>
             <span class="option-desc">L'amitié... mais avec des avantages négociables</span>
           </div>
         </label>
@@ -945,14 +928,19 @@
 
     const payload = { name, type, message: message || '(aucune note)', date: dateStr };
 
+    // Fix CORB: GAS requiert Content-Type text/plain pour les headers CORS corrects.
+    // no-cors + application/json = reponse bloquee par Chrome CORB.
     fetch(GAS_URL, {
       method : 'POST',
-      mode   : 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body   : JSON.stringify(payload)
     })
+    .then(res => res.json().catch(() => ({})))
     .then(() => showSuccess())
-    .catch(() => fallbackMailto(name, type, message, dateStr))
+    .catch(err => {
+      console.warn('GAS fetch error:', err);
+      fallbackMailto(name, type, message, dateStr);
+    })
     .finally(() => {
       btn.disabled = false;
       btn.textContent = '✦   Signer & Envoyer   ✦';
