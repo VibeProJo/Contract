@@ -3,153 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Contrat de Mise au Point</title>
+    <title>Contrat de Relation</title>
     <style>
-        :root {
-            --primary-color: #000000;
-            --bg-color: #f0f2f5;
-            --card-bg: #ffffff;
-            --text-main: #1a1a1a;
-            --text-sub: #65676b;
-            --border-color: #eeeeee;
-        }
-
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-            background-color: var(--bg-color); 
-            margin: 0; 
-            display: flex; 
-            justify-content: center; 
-            align-items: flex-start;
-            min-height: 100vh;
-            padding: 15px;
-            box-sizing: border-box;
-        }
-
-        .card { 
-            background: var(--card-bg); 
-            padding: 30px 20px; 
-            border-radius: 25px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
-            width: 100%;
-            max-width: 480px;
-            box-sizing: border-box;
-            margin-top: 10px;
-        }
-
-        h1 { 
-            text-align: center; 
-            margin: 0; 
-            font-size: 26px; 
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            font-weight: 900;
-        }
-
-        .subtitle { 
-            text-align: center; 
-            color: var(--text-sub); 
-            font-size: 1rem; 
-            margin-bottom: 30px; 
-            font-style: italic;
-        }
-
-        .form-group { margin-bottom: 25px; }
-        
-        label.main-label { 
-            display: block; 
-            font-weight: 800; 
-            margin-bottom: 10px;
-            font-size: 0.85rem;
-            color: var(--text-main);
-            text-transform: uppercase;
-        }
-
-        input[type="text"] { 
-            width: 100%; 
-            padding: 16px; 
-            border: 2px solid var(--border-color); 
-            border-radius: 15px; 
-            box-sizing: border-box;
-            font-size: 18px; /* Évite le zoom auto iPhone */
-            transition: border-color 0.3s;
-        }
-
-        input[type="text"]:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
-
-        /* Liste des options */
-        .options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 30px;
-        }
-
-        .option-card {
-            position: relative;
-            padding: 18px;
-            border: 2px solid var(--border-color);
-            border-radius: 18px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .option-card:active { transform: scale(0.98); }
-
-        .option-card input[type="radio"] {
-            margin-right: 15px;
-            width: 22px;
-            height: 22px;
-            accent-color: var(--primary-color);
-        }
-
-        .option-info b { display: block; font-size: 1.1rem; color: var(--text-main); }
-        .option-info span { font-size: 0.85rem; color: var(--text-sub); }
-
-        /* État sélectionné */
-        .option-card.selected {
-            border-color: var(--primary-color);
-            background-color: #f9f9f9;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-        }
-
-        button { 
-            width: 100%; 
-            padding: 20px; 
-            background: var(--primary-color); 
-            color: white; 
-            border: none; 
-            border-radius: 18px; 
-            font-size: 1.1rem; 
-            font-weight: bold; 
-            cursor: pointer; 
-            transition: background 0.3s;
-            text-transform: uppercase;
-        }
-
-        button:disabled { background: #cccccc; }
-
-        .footer-text {
-            font-size: 0.8rem;
-            color: #999;
-            text-align: center;
-            margin-top: 25px;
-            line-height: 1.5;
-            padding: 0 10px;
-        }
-
-        /* Animation de succès */
-        .success-state {
-            text-align: center;
-            padding: 50px 10px;
-        }
-        .success-icon { font-size: 60px; margin-bottom: 20px; }
+        :root { --p: #000; --bg: #f0f2f5; --txt: #1a1a1a; }
+        body { font-family: sans-serif; background: var(--bg); display: flex; justify-content: center; padding: 15px; margin: 0; }
+        .card { background: #fff; padding: 30px 20px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 100%; max-width: 480px; box-sizing: border-box; }
+        h1 { text-align: center; letter-spacing: 3px; margin: 0; font-size: 26px; }
+        .subtitle { text-align: center; color: #666; font-style: italic; margin-bottom: 30px; }
+        input[type="text"] { width: 100%; padding: 16px; border: 2px solid #eee; border-radius: 15px; box-sizing: border-box; font-size: 18px; margin-bottom: 20px; }
+        .options-container { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+        .option-card { padding: 18px; border: 2px solid #eee; border-radius: 18px; cursor: pointer; display: flex; align-items: center; }
+        .option-card.selected { border-color: var(--p); background: #f9f9f9; }
+        .option-card input { margin-right: 15px; width: 20px; height: 20px; }
+        button { width: 100%; padding: 20px; background: var(--p); color: #fff; border: none; border-radius: 18px; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -160,64 +26,36 @@
         
         <form id="contractForm" action="https://script.google.com/macros/s/AKfycbzxKL3944awFbEH05JsYPk9xhi_iEF7p0n6LV64YzyiIhGpXTyoA3uM33vxCIGbACxI3Q/exec" method="POST" target="hidden_iframe">
             
-            <div class="form-group">
-                <label class="main-label">Je soussigné(e) :</label>
-                <input type="text" name="nom" placeholder="Ton prénom ou pseudo" required>
-            </div>
+            <label for="input_nom" style="font-weight:bold; display:block; margin-bottom:8px;">JE SOUSSIGNÉ(E) :</label>
+            <input type="text" id="input_nom" name="nom" placeholder="Ton prénom" required>
             
-            <label class="main-label">Type de relation souhaité :</label>
+            <p style="font-weight:bold; margin-bottom:10px;">TYPE DE RELATION :</p>
             <div class="options-container">
-                <label class="option-card">
-                    <input type="radio" name="relation" value="Sérieuse" required>
-                    <div class="option-info"><b>Sérieuse</b><span>Fidèle jusqu'à la mort...</span></div>
-                </label>
-                <label class="option-card">
-                    <input type="radio" name="relation" value="Sans prise de tête">
-                    <div class="option-info"><b>Sans prise de tête</b><span>On verra bien...</span></div>
-                </label>
-                <label class="option-card">
-                    <input type="radio" name="relation" value="Ouverte">
-                    <div class="option-info"><b>Ouverte</b><span>C'est que pour le cardio...</span></div>
-                </label>
-                <label class="option-card">
-                    <input type="radio" name="relation" value="Amical ++">
-                    <div class="option-info"><b>Amical ++</b><span>Amitié avec bénéfices...</span></div>
-                </label>
-                <label class="option-card">
-                    <input type="radio" name="relation" value="Amical">
-                    <div class="option-info"><b>Amical</b><span>T'es le sang, c'est tout.</span></div>
-                </label>
+                <label class="option-card"><input type="radio" name="relation" value="Sérieuse" required> <div><b>Sérieuse</b><br><small>Fidèle jusqu'à la mort...</small></div></label>
+                <label class="option-card"><input type="radio" name="relation" value="Sans prise de tête"> <div><b>Sans prise de tête</b><br><small>On verra bien...</small></div></label>
+                <label class="option-card"><input type="radio" name="relation" value="Ouverte"> <div><b>Ouverte</b><br><small>Juste pour le cardio...</small></div></label>
+                <label class="option-card"><input type="radio" name="relation" value="Amical ++"> <div><b>Amical ++</b><br><small>Amitié avec bénéfices...</small></div></label>
+                <label class="option-card"><input type="radio" name="relation" value="Amical"> <div><b>Amical</b><br><small>T'es le sang.</small></div></label>
             </div>
             
             <button type="submit" id="submitBtn" onclick="submitted=true;">Signer le contrat</button>
         </form>
-        
-        <p class="footer-text">Décision prise dans un esprit de respect mutuel, sans obligation dans le maintien d'une relation.</p>
     </div>
 
     <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(typeof submitted !== 'undefined' && submitted){showSuccess()}"></iframe>
 
     <script>
         var submitted = false;
-
-        // Effet visuel lors du clic sur une option
         const cards = document.querySelectorAll('.option-card');
         cards.forEach(card => {
             card.addEventListener('click', () => {
                 cards.forEach(c => c.classList.remove('selected'));
                 card.classList.add('selected');
-                card.querySelector('input').checked = true;
             });
         });
 
-        // Fonction déclenchée après l'envoi réussi
         function showSuccess() {
-            document.getElementById('mainContainer').innerHTML = `
-                <div class="success-state">
-                    <div class="success-icon">✅</div>
-                    <h2>C'est signé !</h2>
-                    <p style="color: #666;">Le contrat a été envoyé avec succès.<br>Tu peux fermer cet onglet.</p>
-                </div>`;
+            document.getElementById('mainContainer').innerHTML = "<div style='text-align:center;padding:50px;'><h1>✅</h1><h2>C'est signé !</h2><p>Vérifie tes mails (ou spams).</p></div>";
         }
     </script>
 </body>
