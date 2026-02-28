@@ -3,91 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Contrat de Relation</title>
+    <title>Contrat Officiel</title>
     <style>
-        :root { --p: #000; --bg: #f0f2f5; }
-        body { font-family: sans-serif; background: var(--bg); display: flex; justify-content: center; padding: 15px; margin: 0; }
-        .card { background: #fff; padding: 30px 20px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 100%; max-width: 480px; box-sizing: border-box; }
-        h1 { text-align: center; letter-spacing: 3px; margin: 0; font-size: 26px; }
-        .subtitle { text-align: center; color: #666; font-style: italic; margin-bottom: 30px; }
-        input[type="text"] { width: 100%; padding: 16px; border: 2px solid #eee; border-radius: 15px; box-sizing: border-box; font-size: 18px; margin-bottom: 20px; }
-        .options-container { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
-        .option-card { padding: 18px; border: 2px solid #eee; border-radius: 18px; cursor: pointer; display: flex; align-items: center; transition: 0.2s; }
-        .option-card.selected { border-color: var(--p); background: #f9f9f9; }
-        .option-card input { margin-right: 15px; width: 20px; height: 20px; }
-        button { width: 100%; padding: 20px; background: var(--p); color: #fff; border: none; border-radius: 18px; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
-        button:disabled { background: #ccc; }
+        :root { --p: #000; --bg: #f4f4f7; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); display: flex; justify-content: center; padding: 15px; margin: 0; }
+        .card { background: #fff; padding: 30px 20px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 450px; box-sizing: border-box; }
+        h1 { text-align: center; letter-spacing: 3px; font-size: 24px; margin-bottom: 5px; }
+        .sub { text-align: center; color: #888; margin-bottom: 30px; font-style: italic; }
+        input[type="text"] { width: 100%; padding: 16px; border: 2px solid #eee; border-radius: 12px; font-size: 18px; box-sizing: border-box; margin-bottom: 20px; }
+        .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+        .opt { padding: 18px; border: 2px solid #eee; border-radius: 15px; cursor: pointer; display: flex; align-items: center; transition: 0.2s; }
+        .opt.selected { border-color: var(--p); background: #fafafa; }
+        .opt input { margin-right: 15px; width: 20px; height: 20px; accent-color: #000; }
+        button { width: 100%; padding: 20px; background: var(--p); color: #fff; border: none; border-radius: 15px; font-size: 18px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div class="card" id="mainContainer">
-        <h1>CONTRAT</h1>
-        <p class="subtitle">Mise au point sur notre relation</p>
+<div class="card" id="box">
+    <h1>CONTRAT</h1>
+    <p class="sub">Mise au point sur notre relation</p>
+    
+    <form id="form" action="https://script.google.com/macros/s/AKfycbzxKL3944awFbEH05JsYPk9xhi_iEF7p0n6LV64YzyiIhGpXTyoA3uM33vxCIGbACxI3Q/exec" method="POST" target="vibe_check">
+        <input type="text" name="nom" placeholder="Ton prénom" required>
         
-        <form id="contractForm">
-            <label for="input_nom" style="font-weight:bold; display:block; margin-bottom:8px;">JE SOUSSIGNÉ(E) :</label>
-            <input type="text" id="input_nom" name="nom" placeholder="Ton prénom" required>
-            
-            <p style="font-weight:bold; margin-bottom:10px;">TYPE DE RELATION :</p>
-            <div class="options-container">
-                <label class="option-card"><input type="radio" name="relation" value="Sérieuse" required> <div><b>Sérieuse</b><br><small>Fidèle jusqu'à la mort...</small></div></label>
-                <label class="option-card"><input type="radio" name="relation" value="Sans prise de tête"> <div><b>Sans prise de tête</b><br><small>On verra bien...</small></div></label>
-                <label class="option-card"><input type="radio" name="relation" value="Ouverte"> <div><b>Ouverte</b><br><small>Juste pour le cardio...</small></div></label>
-                <label class="option-card"><input type="radio" name="relation" value="Amical ++"> <div><b>Amical ++</b><br><small>Amitié avec bénéfices...</small></div></label>
-                <label class="option-card"><input type="radio" name="relation" value="Amical"> <div><b>Amical</b><br><small>T'es le sang.</small></div></label>
-            </div>
-            
-            <button type="submit" id="submitBtn">Signer le contrat</button>
-        </form>
-    </div>
+        <div class="options">
+            <label class="opt"><input type="radio" name="relation" value="Sérieuse" required><b>Sérieuse</b></label>
+            <label class="opt"><input type="radio" name="relation" value="Sans prise de tête"><b>Sans prise de tête</b></label>
+            <label class="opt"><input type="radio" name="relation" value="Ouverte"><b>Ouverte</b></label>
+            <label class="opt"><input type="radio" name="relation" value="Amical ++"><b>Amical ++</b></label>
+            <label class="opt"><input type="radio" name="relation" value="Amical"><b>Amical</b></label>
+        </div>
+        
+        <button type="submit" onclick="submitted=true">SIGNER</button>
+    </form>
+</div>
 
-    <script>
-        // Gestion du style visuel des cases
-        const cards = document.querySelectorAll('.option-card');
-        cards.forEach(card => {
-            card.addEventListener('click', () => {
-                cards.forEach(c => c.classList.remove('selected'));
-                card.classList.add('selected');
-            });
+<iframe name="vibe_check" id="vibe_check" style="display:none;" onload="if(typeof submitted!=='undefined') showSuccess()"></iframe>
+
+<script>
+    var submitted = false;
+    document.querySelectorAll('.opt').forEach(el => {
+        el.addEventListener('click', () => {
+            document.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
         });
+    });
 
-        // Envoi des données sans passer par une iframe
-        document.getElementById('contractForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            btn.disabled = true;
-            btn.innerText = "Signature en cours...";
+    function showSuccess() {
+        document.getElementById('box').innerHTML = "<div style='text-align:center;padding:50px;'><h1>✅</h1><h2>C'est signé !</h2><p>Le contrat est dans ma boîte mail.</p></div>";
+    }
+</script>
 
-            const url = "https://script.google.com/macros/s/AKfycbzxKL3944awFbEH05JsYPk9xhi_iEF7p0n6LV64YzyiIhGpXTyoA3uM33vxCIGbACxI3Q/exec"; // <--- METS TON URL ICI
-            const formData = new FormData(this);
-            
-            // On utilise fetch en mode 'no-cors'
-            // Cela envoie les données mais ignore la réponse de Google pour éviter le blocage
-            fetch(url, {
-                method: 'POST',
-                mode: 'no-cors', 
-                body: formData
-            })
-            .then(() => {
-                // Même si Google renvoie une erreur CORB, l'envoi a LIEU.
-                // Donc on affiche le message de succès quoi qu'il arrive.
-                showSuccess();
-            })
-            .catch(err => {
-                console.error(err);
-                showSuccess(); // On force le succès car le mail part souvent même avec une erreur client
-            });
-        });
-
-        function showSuccess() {
-            document.getElementById('mainContainer').innerHTML = `
-                <div style='text-align:center;padding:50px;'>
-                    <h1 style="font-size:60px;">✅</h1>
-                    <h2>C'est signé !</h2>
-                    <p>Le contrat a été envoyé avec succès.</p>
-                </div>`;
-        }
-    </script>
 </body>
 </html>
